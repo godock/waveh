@@ -121,8 +121,12 @@ void WavFile::printHeader(){
     header->riff.WAVE[2] << header->riff.WAVE[3] << endl;
     cerr << "FMT ID: " << header->fmt.fmt[0] << header->fmt.fmt[1] <<
     header->fmt.fmt[2] << header->fmt.fmt[3] << endl;
-    cerr << "Format: " << header->fmt.audioFormat << endl;
-    cerr << "# channels: " << header->fmt.numOfChan << endl;
+    switch(header->fmt.audioFormat){
+        case 1:
+            cerr << "Format: PCM" << endl;
+            break;
+    }
+    cerr << "Channels: " << header->fmt.numOfChan << endl;
     cerr << "Sampling rate: " << header->fmt.samplingRate << " Hz" << endl;
     cerr << "Bytes per sec: " << header->fmt.bytesPerSec << " Bytes/s" << endl;
     cerr << "Data size (Audio): " << header->data.subChunk2Size << " bytes" << endl;
