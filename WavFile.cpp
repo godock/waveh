@@ -140,19 +140,10 @@ int WavFile::setHeader(unsigned int samplingRate, unsigned short bitsPerSample, 
     int datasize = dataSize;
     if(bitsPerSample == 16) datasize *= 2;
     header = (WAV_header *)malloc(sizeof(RIFF_h)+sizeof(data_h)+sizeof(fmt_h));
-    header->riff.RIFF[0] = 'R';
-    header->riff.RIFF[1] = 'I';
-    header->riff.RIFF[2] = 'F';
-    header->riff.RIFF[3] = 'F';
+    strcpy(header->riff.RIFF, h_names.riff_name);
     header->riff.fileSize = datasize+STANDARD_HEADER_SIZE;
-    header->riff.WAVE[0] = 'W';
-    header->riff.WAVE[1] = 'A';
-    header->riff.WAVE[2] = 'V';
-    header->riff.WAVE[3] = 'E';
-    header->fmt.fmt[0] = 'f';
-    header->fmt.fmt[1] = 'm';
-    header->fmt.fmt[2] = 't';
-    header->fmt.fmt[3] = ' ';
+    strcpy(header->riff.WAVE, h_names.wave_name);
+    strcpy(header->fmt.fmt, h_names.fmt_name);
     header->fmt.subChunk1Size = 16;
     header->fmt.audioFormat = 1; //PCM
     header->fmt.numOfChan = numOfChan;
@@ -160,10 +151,7 @@ int WavFile::setHeader(unsigned int samplingRate, unsigned short bitsPerSample, 
     header->fmt.bytesPerSec = 2*samplingRate;
     header->fmt.blockAlign = 2;
     header->fmt.bitsPerSample = bitsPerSample;
-    header->data.subChunk2ID[0] = 'd';
-    header->data.subChunk2ID[1] = 'a';
-    header->data.subChunk2ID[2] = 't';
-    header->data.subChunk2ID[3] = 'a';
+    strcpy(header->data.subChunk2ID, h_names.data_name);
     header->data.subChunk2Size = datasize;
     return 0;
 }
