@@ -13,6 +13,8 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <cstring>
+#include <cstdlib>
 
 #define ERR_FILE_NOT_FOUND -1
 #define ERR_READING_FILE -2

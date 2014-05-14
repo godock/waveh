@@ -1,9 +1,9 @@
 CC=g++
 CFLAGS=-c -Wall
 LDFLAGS=
-SOURCES=main.cpp hello.cpp factorial.cpp
+SOURCES=main.cpp WavFile.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
-EXECUTABLE=wh
+EXECUTABLE=bin/wh
 
 all: $(SOURCES) $(EXECUTABLE)
 
@@ -14,4 +14,4 @@ $(EXECUTABLE): $(OBJECTS)
 	$(CC) $(CFLAGS) $< -o $@
 
 clean: 
-	rm -rf *o hello
+	rm -rf *o $(EXECUTABLE)
