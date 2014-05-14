@@ -59,13 +59,6 @@ typedef struct{
     data_h data;
 }WAV_header;
 
-typedef struct{
-    const char *riff_name = "RIFF";
-    const char *wave_name = "WAVE";
-    const char *fmt_name = "fmt ";
-    const char *data_name = "data";
-}header_names;
-
 /**
  END OF HEADER STRUCTS
  **/
@@ -76,7 +69,11 @@ private:
     WAV_header *header;
     std::vector<short> cached_data;
     std::string filePath;
-    header_names h_names;
+
+    static const char *riff_name;
+    static const char *wave_name;
+    static const char *fmt_name;
+    static const char *data_name;
 public:
     /** Build a wave object replicating a wave file. 
      Call getData() to obtain the cached signal. **/

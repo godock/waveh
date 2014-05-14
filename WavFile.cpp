@@ -12,6 +12,11 @@
 
 using namespace std;
 
+const char *WavFile::riff_name = "RIFF";
+const char *WavFile::wave_name = "WAVE";
+const char *WavFile::fmt_name = "fmt ";
+const char *WavFile::data_name = "data";
+
 WavFile::~WavFile(){
     if(header){
         free(header);
@@ -99,7 +104,7 @@ int WavFile::readWavFile(){
     cached_data.clear();
     cached_data.resize(dataSize/(fmt_hdr.bitsPerSample/8));
     if(fread(&cached_data[0],1,dataSize,sound) == dataSize){
-        cerr << endl << "Readen successfully: " << dataSize << " bytes" << endl;
+        cout << endl << "Readen successfully: " << fileSize+8 << " bytes" << endl;
     }
     fclose(sound);
     //Save the header
@@ -116,24 +121,24 @@ int WavFile::readWavFile(){
 
 void WavFile::printHeader(){
     if(!header) return;
-    cerr << "=====================================" << endl;
-    cerr << "RIFF ID: " << header->riff.RIFF[0] << header->riff.RIFF[1] <<
+    cout << "=====================================" << endl;
+    cout << "RIFF ID: " << header->riff.RIFF[0] << header->riff.RIFF[1] <<
     header->riff.RIFF[2] << header->riff.RIFF[3] << endl;
-    cerr << "WAVE ID: " << header->riff.WAVE[0] << header->riff.WAVE[1] <<
+    cout << "WAVE ID: " << header->riff.WAVE[0] << header->riff.WAVE[1] <<
     header->riff.WAVE[2] << header->riff.WAVE[3] << endl;
-    cerr << "FMT ID: " << header->fmt.fmt[0] << header->fmt.fmt[1] <<
+    cout << "FMT ID: " << header->fmt.fmt[0] << header->fmt.fmt[1] <<
     header->fmt.fmt[2] << header->fmt.fmt[3] << endl;
     switch(header->fmt.audioFormat){
         case 1:
             cerr << "Format: PCM" << endl;
             break;
     }
-    cerr << "Channels: " << header->fmt.numOfChan << endl;
-    cerr << "Sampling rate: " << header->fmt.samplingRate << " Hz" << endl;
-    cerr << "Bytes per sec: " << header->fmt.bytesPerSec << " Bytes/s" << endl;
-    cerr << "Data size (Audio): " << header->data.subChunk2Size << " bytes" << endl;
-    cerr << "Header size: " << sizeof(header->fmt) + sizeof(header->data) + sizeof(header->riff) << " bytes" << endl;
-    cerr << "=====================================" << endl;
+    cout << "Channels: " << header->fmt.numOfChan << endl;
+    cout << "Sampling rate: " << header->fmt.samplingRate << " Hz" << endl;
+    cout << "Bytes per sec: " << header->fmt.bytesPerSec << " Bytes/s" << endl;
+    cout << "Data size (Audio): " << header->data.subChunk2Size << " bytes" << endl;
+    cout << "Header size: " << sizeof(header->fmt) + sizeof(header->data) + sizeof(header->riff) << " bytes" << endl;
+    cout << "=====================================" << endl;
 }
 
 /* Function to set a 44 bytes header->specifying: fm, bits/sample, dataSize and #channels */
@@ -142,10 +147,10 @@ int WavFile::setHeader(unsigned int samplingRate, unsigned short bitsPerSample, 
     int datasize = dataSize;
     if(bitsPerSample == 16) datasize *= 2;
     header = (WAV_header *)malloc(sizeof(RIFF_h)+sizeof(data_h)+sizeof(fmt_h));
-    strcpy(header->riff.RIFF, h_names.riff_name);
+    strcpy(header->riff.RIFF, riff_name);
     header->riff.fileSize = datasize+STANDARD_HEADER_SIZE;
-    strcpy(header->riff.WAVE, h_names.wave_name);
-    strcpy(header->fmt.fmt, h_names.fmt_name);
+    strcpy(header->riff.WAVE, wave_name);
+    strcpy(header->fmt.fmt, fmt_name);
     header->fmt.subChunk1Size = 16;
     header->fmt.audioFormat = 1; //PCM
     header->fmt.numOfChan = numOfChan;
@@ -153,7 +158,7 @@ int WavFile::setHeader(unsigned int samplingRate, unsigned short bitsPerSample, 
     header->fmt.bytesPerSec = 2*samplingRate;
     header->fmt.blockAlign = 2;
     header->fmt.bitsPerSample = bitsPerSample;
-    strcpy(header->data.subChunk2ID, h_names.data_name);
+    strcpy(header->data.subChunk2ID, data_name);
     header->data.subChunk2Size = datasize;
     return 0;
 }
