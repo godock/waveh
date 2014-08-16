@@ -3,7 +3,7 @@ CFLAGS=-c -Wall
 LDFLAGS=
 SOURCES=src/WavFile.cpp src/main.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
-EXECUTABLE=bin/wh
+EXECUTABLE=wh
 
 all: $(SOURCES) $(EXECUTABLE)
 
