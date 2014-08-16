@@ -11,8 +11,10 @@
 
 int main(int argc, const char * argv[])
 {
-    if(argc<2)
+    if(argc<2){
         std::cerr << "Usage: " << argv[0] << " <input file>" << std::endl;
+        return -1;
+    }
     WavFile wave(argv[1]);
     wave.printHeader();
     //print file duration in seconds

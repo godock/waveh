@@ -1,7 +1,7 @@
 CC=g++
 CFLAGS=-c -Wall
 LDFLAGS=
-SOURCES=main.cpp WavFile.cpp
+SOURCES=src/WavFile.cpp src/main.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
 EXECUTABLE=bin/wh
 
@@ -14,4 +14,4 @@ $(EXECUTABLE): $(OBJECTS)
 	$(CC) $(CFLAGS) $< -o $@
 
 clean: 
-	rm -rf *o $(EXECUTABLE)
+	rm -rf src/*o $(EXECUTABLE)
