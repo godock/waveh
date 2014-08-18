@@ -20,6 +20,11 @@ Wav_file::Wav_file(vector<uint8_t> &data, uint32_t sample_rate, uint16_t bits_pe
     set_header(data, sample_rate, bits_per_sample, channels);
 }
 
+Wav_file::Wav_file(vector<uint8_t> &data, uint32_t sample_rate, uint16_t channels){
+    signal_data = data;
+    set_header(data, sample_rate, 8, channels);
+}
+
 /* CONSTRUCTOR FROM FILE
  ************************/
 Wav_file::Wav_file(std::string file_path, bool verbose):file_path(file_path){
@@ -94,11 +99,11 @@ void Wav_file::print_header(){
         return;
     }
     cout << "=====================================" << endl;
-    cout << "RIFF ID: " << string(header.riff.RIFF).substr(0,4) << endl;
+    cout << "RIFF ID: " << string((char*)header.riff.RIFF).substr(0,4) << endl;
     cout << "File size: " << header.riff.file_size+8 << " Bytes" << endl;
-    cout << "WAVE ID: " << string(header.riff.WAVE).substr(0,4) << endl;
+    cout << "WAVE ID: " << string((char*)header.riff.WAVE).substr(0,4) << endl;
     cout << "-------------------------------------" << endl;
-    cout << "FMT ID: " << string(header.fmt.fmt) << endl;
+    cout << "FMT ID: " << string((char*)header.fmt.fmt) << endl;
     cout << "fmt header size: " << header.fmt.sub_chunk_1_size << " Bytes" << endl;
     switch(header.fmt.audio_format){
         case 1:
@@ -111,7 +116,7 @@ void Wav_file::print_header(){
     cout << "Block align: " << header.fmt.block_align << " Bytes" << endl;
     cout << "Bits per sample: " << header.fmt.bits_per_sample << " bits"<< endl;
     cout << "-------------------------------------" << endl;
-    cout << "DATA ID: " << string(header.data.data).substr(0,4) << endl;
+    cout << "DATA ID: " << string((char*)header.data.data).substr(0,4) << endl;
     cout << "Data size (Audio): " << header.data.sub_chunk_2_size << " bytes" << endl;
     cout << "=====================================" << endl;
 }

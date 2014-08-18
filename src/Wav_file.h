@@ -30,25 +30,25 @@ typedef unsigned char uint8_t;
  *****************/
 
 typedef struct{
-    char RIFF[4];
-    unsigned int file_size;
-    char WAVE[4];
+    uint8_t RIFF[4];
+    uint32_t file_size;
+    uint8_t WAVE[4];
 }RIFF_h;
 
 typedef struct{
-    char fmt[4];
-    unsigned int sub_chunk_1_size;
-    unsigned short audio_format;
-    unsigned short channels;
-    unsigned int sample_rate;
-    unsigned int bytes_per_sec;
-    unsigned short block_align;
-    unsigned short bits_per_sample;
+    uint8_t fmt[4];
+    uint32_t sub_chunk_1_size;
+    uint16_t audio_format;
+    uint16_t channels;
+    uint32_t sample_rate;
+    uint32_t bytes_per_sec;
+    uint16_t block_align;
+    uint16_t bits_per_sample;
 }fmt_h;
 
 typedef struct{
-    char data[4];
-    unsigned int sub_chunk_2_size;
+    uint8_t data[4];
+    uint32_t sub_chunk_2_size;
 }data_h;
 
 typedef struct{
@@ -72,12 +72,18 @@ private:
     static const char *fmt_name;
     static const char *data_name;
 public:
-    /// Constructor to build a new wav file from a buffer
-    /// @param data array with signal
-    /// @param sample_rate
-    /// @param bits_per_sample
+    /// Constructor to build a new wav file from a raw buffer.
+    /// @param data array with signal, it can be interleaved to contain 8 or 16 bit samples as well as different channels.
+    /// @param sample_rate in Hertz
+    /// @param bits_per_sample 8 or 16
     /// @param channels
     Wav_file(std::vector<uint8_t> &data, uint32_t sample_rate, uint16_t bits_per_sample, uint16_t channels);
+    
+    /// Constructor to build a new wav file from a buffer.
+    /// @param data array with signal, it must be an 8 bit PCM signal, though it can contain different channels interleaved
+    /// @param sample_rate in Hz
+    /// @param channels
+    Wav_file(std::vector<uint8_t> &data, uint32_t sample_rate, uint16_t channels);
     
     /// Constructor to build a new wav file from a file
     /// @param file_path to attach the object to a file
@@ -94,7 +100,7 @@ public:
     /// print_header prints the header of this WAV object
     void print_header();
     
-    /// get_data gets the signal data of this WAV object
+    /// get_data gets the raw signal data of this WAV object in an array of bytes.
     /// @return vector reference containing the audio data of the object
     std::vector<uint8_t> &get_data(){ return signal_data; }
     
