@@ -15,14 +15,19 @@ const char *Wav_file::data_name = "data";
 
 /* CONSTRUCTOR FROM BUFFER
  **************************/
-Wav_file::Wav_file(vector<uint8_t> &data, uint32_t sample_rate, uint16_t bits_per_sample, uint16_t channels){
+Wav_file::Wav_file(vector<int8_t> &data, uint32_t sample_rate, uint16_t bits_per_sample, uint16_t channels){
     signal_data = data;
     set_header(data, sample_rate, bits_per_sample, channels);
 }
 
-Wav_file::Wav_file(vector<uint8_t> &data, uint32_t sample_rate, uint16_t channels){
-    signal_data = data;
-    set_header(data, sample_rate, 8, channels);
+Wav_file::Wav_file(vector<int16_t> &data, uint32_t sample_rate, uint16_t channels){
+    for(int i=0;i<data.size();i++){
+        //LSB
+        signal_data[2*i] = data[i]&0xFF00;
+        //MSB
+        signal_data[2*i+1] = data[i]>>8;
+    }
+    set_header(signal_data, sample_rate, 16, channels);
 }
 
 /* CONSTRUCTOR FROM FILE
@@ -123,7 +128,7 @@ void Wav_file::print_header(){
 
 /* Set up the 44 bytes header
  *****************************/
-void Wav_file::set_header(vector<uint8_t> &data, uint32_t sample_rate, uint16_t bits_per_sample, uint16_t channels){
+void Wav_file::set_header(vector<int8_t> &data, uint32_t sample_rate, uint16_t bits_per_sample, uint16_t channels){
     //set up the RIFF header
     memcpy(header.riff.RIFF, riff_name, 4);
     header.riff.file_size = (uint32_t) data.size() + STANDARD_HEADER_SIZE - 8;
@@ -161,4 +166,18 @@ bool Wav_file::save(){
     return true;
 }
 
+/* Get the signal data
+ **********************/
+bool Wav_file::get_data(std::vector<int16_t> &data){
+    data.clear();
+    if(header.fmt.bits_per_sample != 16){
+        cerr << "This is not a 16 bit PCM signal" << endl;
+        return false;
+    }
+    data.resize(signal_data.size()/2);
+    for(int i=0;i<data.size();i++){
+        data[i] = (int8_t)signal_data[2*i] | (int8_t)signal_data[2*i+1]<<8;
+    }
+    return true;
+}
 

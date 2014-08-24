@@ -25,7 +25,9 @@
 typedef unsigned int uint32_t;
 typedef unsigned short uint16_t;
 typedef unsigned char uint8_t;
-
+typedef signed char int8_t;
+typedef signed short int16_t;
+typedef signed int int32_t;
 /* HEADER STRUCTS
  *****************/
 
@@ -64,7 +66,7 @@ class Wav_file{
     
 private:
     WAV_header header;
-    std::vector<uint8_t> signal_data;
+    std::vector<int8_t> signal_data;
     std::string file_path;
     
     static const char *riff_name;
@@ -77,13 +79,13 @@ public:
     /// @param sample_rate in Hertz
     /// @param bits_per_sample 8 or 16
     /// @param channels
-    Wav_file(std::vector<uint8_t> &data, uint32_t sample_rate, uint16_t bits_per_sample, uint16_t channels);
+    Wav_file(std::vector<int8_t> &data, uint32_t sample_rate, uint16_t bits_per_sample, uint16_t channels);
     
     /// Constructor to build a new wav file from a buffer.
-    /// @param data array with signal, it must be an 8 bit PCM signal, though it can contain different channels interleaved
+    /// @param data array with signal, it must be an 16 bit PCM signal, and it can contain different channels interleaved.
     /// @param sample_rate in Hz
     /// @param channels
-    Wav_file(std::vector<uint8_t> &data, uint32_t sample_rate, uint16_t channels);
+    Wav_file(std::vector<int16_t> &data, uint32_t sample_rate, uint16_t channels);
     
     /// Constructor to build a new wav file from a file
     /// @param file_path to attach the object to a file
@@ -101,8 +103,12 @@ public:
     void print_header();
     
     /// get_data gets the raw signal data of this WAV object in an array of bytes.
-    /// @return vector reference containing the audio data of the object
-    std::vector<uint8_t> &get_data(){ return signal_data; }
+    /// @param
+    void get_data(std::vector<int8_t> &data){ data = signal_data; }
+    /// get_data gets the raw signal data of this WAV object in an array of shorts. This only
+    /// works with 16 bit PCM signals.
+    /// @param
+    bool get_data(std::vector<int16_t> &data);
     
     /// get_header gets a copy of the header of this WAV object
     WAV_header get_header() const{ return header; }
@@ -116,7 +122,7 @@ public:
     /// @param sample_rate
     /// @param bits_per_sample
     /// @param channels
-    void set_header(std::vector<uint8_t> &data, uint32_t sample_rate, uint16_t bits_per_sample, uint16_t channels);
+    void set_header(std::vector<int8_t> &data, uint32_t sample_rate, uint16_t bits_per_sample, uint16_t channels);
     
     /// save saves the contents of this WAV object into the file it is attached to
     /// @return true if the save was successful, false otherwise.
