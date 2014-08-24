@@ -21,9 +21,10 @@ Wav_file::Wav_file(vector<int8_t> &data, uint32_t sample_rate, uint16_t bits_per
 }
 
 Wav_file::Wav_file(vector<int16_t> &data, uint32_t sample_rate, uint16_t channels){
+    signal_data.resize(data.size()*2);
     for(int i=0;i<data.size();i++){
         //LSB
-        signal_data[2*i] = data[i]&0xFF00;
+        signal_data[2*i] = data[i]&0x00FF;
         //MSB
         signal_data[2*i+1] = data[i]>>8;
     }
@@ -176,7 +177,7 @@ bool Wav_file::get_data(std::vector<int16_t> &data){
     }
     data.resize(signal_data.size()/2);
     for(int i=0;i<data.size();i++){
-        data[i] = (int8_t)signal_data[2*i] | (int8_t)signal_data[2*i+1]<<8;
+        data[i] = (int16_t)((uint8_t)signal_data[2*i] | (uint8_t)signal_data[2*i+1]<<8);
     }
     return true;
 }

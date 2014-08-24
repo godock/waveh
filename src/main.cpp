@@ -20,13 +20,6 @@ int main(int argc, const char * argv[])
     Wav_file wave(argv[1]);
     //compute and play the file duration in seconds
     WAV_header hdr = wave.get_header();
-    ofstream outf("/tmp/output.txt");
-    vector<int16_t> raw_data;
-    wave.get_data(raw_data);
-    for(int i=0;i<raw_data.size();i++){
-        outf << raw_data[i] << endl;
-    }
-    outf.close();
     int samples = hdr.data.sub_chunk_2_size/((hdr.fmt.bits_per_sample/8)*hdr.fmt.channels);
     double seconds = (double)samples/(double)hdr.fmt.sample_rate;
     std::cerr << "file duration (seconds): " << seconds << std::endl;
