@@ -5,8 +5,6 @@
 //  Created by Santi on 23/04/14.
 //
 
-#include <iostream>
-#include <fstream>
 #include "Wav_file.h"
 #define NOT_ENOUGH_INPUT_ARGUMENTS argc<2
 using namespace std;
