@@ -8,12 +8,12 @@
 #include <iostream>
 #include <fstream>
 #include "Wav_file.h"
-
+#define NOT_ENOUGH_INPUT_ARGUMENTS argc<2
 using namespace std;
 
 int main(int argc, const char * argv[])
 {
-    if(argc<2){
+    if(NOT_ENOUGH_INPUT_ARGUMENTS){
         std::cerr << "Usage: " << argv[0] << " <input file>" << std::endl;
         return -1;
     }

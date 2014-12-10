@@ -22,7 +22,7 @@ Wav_file::Wav_file(vector<int8_t> &data, uint32_t sample_rate, uint16_t bits_per
 
 Wav_file::Wav_file(vector<int16_t> &data, uint32_t sample_rate, uint16_t channels){
     signal_data.resize(data.size()*2);
-    for(int i=0;i<data.size();i++){
+    for(unsigned int i=0;i<data.size();i++){
         //LSB
         signal_data[2*i] = data[i]&0x00FF;
         //MSB
@@ -89,7 +89,7 @@ int Wav_file::read_wav_file(bool verbose){
     signal_data.clear();
     signal_data.resize(header.data.sub_chunk_2_size);
     wav_file.read((char*)&signal_data[0], header.data.sub_chunk_2_size);
-    if(wav_file.gcount()!=header.data.sub_chunk_2_size){
+    if((uint32_t)wav_file.gcount()!=header.data.sub_chunk_2_size){
         cerr << "Error: Something went wrong reading the signal data" << endl;
         return ERR_READING_FILE;
     }
@@ -176,7 +176,7 @@ bool Wav_file::get_data(std::vector<int16_t> &data){
         return false;
     }
     data.resize(signal_data.size()/2);
-    for(int i=0;i<data.size();i++){
+    for(unsigned int i=0;i<data.size();i++){
         data[i] = (int16_t)((uint8_t)signal_data[2*i] | (uint8_t)signal_data[2*i+1]<<8);
     }
     return true;
