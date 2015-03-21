@@ -5,7 +5,7 @@
 //  Created by Santi on 23/04/14.
 //
 
-#include "Wav_file.h"
+#include "wav_file.h"
 #define NOT_ENOUGH_INPUT_ARGUMENTS argc<2
 using namespace std;
 
