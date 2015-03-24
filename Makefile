@@ -1,7 +1,7 @@
 CC=g++
 CFLAGS=-c -Wall
 LDFLAGS=
-SOURCES=src/Wav_file.cpp src/main.cpp
+SOURCES=src/wav_file.cpp src/main.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
 EXECUTABLE=wh
 
